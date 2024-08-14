@@ -5,8 +5,8 @@ const userSchema = new mongoose.Schema ({
     //user ID will be generated automatically
     username: { type: String, required: true },
     email: {type: String},
-    password: {type: String} //Make sure to encrypt password & create validation)
-
+    password: {type: String}, //Make sure to encrypt password & create validation)
+    conversations: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Conversation' }]
 })
 
 //Create Model based on User Schema

@@ -1,7 +1,11 @@
 import express from 'express'
 import './db.js'
-import router from './routes/user_routes.js'
+import userRouter from './routes/user_routes.js'
+import messageRouter from './routes/message_routes.js'
+import conversationRouter from './routes/conversation_routes.js'
+
 import cors from 'cors'
+
 
 // creating an instance of the express app
 const app = express()
@@ -13,6 +17,8 @@ app.use(cors())
 app.use(express.json())
 
 // attaching all the user routes to the application
-app.use('/user', router)
+app.use('/user', userRouter)
+app.use('/message', messageRouter)
+app.use('/conversation', conversationRouter)
 
 export default app

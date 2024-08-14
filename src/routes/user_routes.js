@@ -1,15 +1,15 @@
 import { Router } from 'express'
 import { UserModel } from '../models/UserModel.js'
 
-const router = Router()
+const userRouter = Router()
 
 //Retrieve All Users
-router.get('/', async (req, res) => res.send(await UserModel.find()))
+userRouter.get('/', async (req, res) => res.send(await UserModel.find()))
 
 
 //Create User
 
-router.post('/', async (req, res) => {
+userRouter.post('/', async (req, res) => {
     try {
         const newUser = await UserModel.create(req.body)
         res.status(201).send(newUser)
@@ -20,4 +20,4 @@ router.post('/', async (req, res) => {
     }
 })
 
-export default router
+export default userRouter
