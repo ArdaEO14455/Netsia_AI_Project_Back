@@ -1,10 +1,17 @@
 const express = require('express');
-const app = express();
 const PORT = process.env.PORT || 8000;
 const cors = require('cors');
+const app = express();
+
+
+//allow middleware to access to routes
 app.use(cors());
 
+//parse incoming requests with express.json
+app.use(express.json())
 
+
+//Mock Conversation History
 const conversationHistory = [
     { user: "User", text: "user message 1" },
     { user: "chatGPT", text: "mock response 1" },
@@ -14,7 +21,7 @@ const conversationHistory = [
     { user: "chatGPT", text: "mock response 3" },
 ]
 
-
+//Mock Conversations
 const allConversations = {
     'conversation_1': {
       name: 'Conversation 1',

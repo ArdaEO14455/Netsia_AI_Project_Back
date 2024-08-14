@@ -4,8 +4,8 @@ import mongoose from "mongoose";
 const userSchema = new mongoose.Schema ({
     //user ID will be generated automatically
     username: { type: String, required: true },
-    email: {type: String, required: true},
-    password: {type: String, required: true} //Make sure to encrypt password & create validation)
+    email: {type: String},
+    password: {type: String} //Make sure to encrypt password & create validation)
 
 })
 
