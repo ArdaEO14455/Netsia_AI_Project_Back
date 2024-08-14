@@ -1,14 +1,18 @@
-const express = require('express');
+import app from './app.js'
+
+// const express = require('express');
 const PORT = process.env.PORT || 8000;
-const cors = require('cors');
-const app = express();
+// const cors = require('cors');
+// const app = express();
 
 
 //allow middleware to access to routes
-app.use(cors());
+// app.use(cors());
 
 //parse incoming requests with express.json
-app.use(express.json())
+// app.use(express.json())
+
+// app.use
 
 
 //Mock Conversation History
@@ -58,17 +62,17 @@ const allConversations = {
     }
   };
 
-app.get('/', (req, res) => {
-  res.send('Hello, World!');
-});
+// app.get('/', (req, res) => {
+//   res.send('Hello, World!');
+// });
 
-app.get('/conversation-history', (req, res) => {
-    res.json(conversationHistory);
-  });
+// app.get('/conversation-history', (req, res) => {
+//     res.json(conversationHistory);
+//   });
 
-app.get('/allConversations', (req, res) => {
-res.json(allConversations);
-});
+// app.get('/allConversations', (req, res) => {
+// res.json(allConversations);
+// });
 
 
 

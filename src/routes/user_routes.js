@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { UserModel } from '../models/UserModel'
+import { UserModel } from '../models/UserModel.js'
 
 const router = Router()
 
@@ -19,3 +19,5 @@ router.post('/', async (req, res) => {
         res.status(500).send({ error: err.message })
     }
 })
+
+export default router
