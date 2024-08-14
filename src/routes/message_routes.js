@@ -5,9 +5,9 @@ import { ConversationModel } from '../models/ConversationModel.js'
 const messageRouter = Router()
 
 // Retrieve all messages in a given conversation
-messageRouter.get('/:conversationId', async (req, res) => {
+messageRouter.get('/:id', async (req, res) => {
     try {
-        const conversation = await ConversationModel.findById(req.params.conversationId).populate('messages');
+        const conversation = await ConversationModel.findById(req.params.id).populate('messages');
         if (!conversation) {
             return res.status(404).send({ error: 'Conversation not found' });
         }
@@ -19,19 +19,33 @@ messageRouter.get('/:conversationId', async (req, res) => {
 });
 //Create Message
 
-messageRouter.post('/:conversationId', async (req, res) => {
+messageRouter.post('/:id', async (req, res) => {
     try {
-        const conversation = await ConversationModel.findById(req.params.conversationId);
+        // Find the conversation by its ID
+        const conversation = await ConversationModel.findById(req.params.id);
         if (!conversation) {
             return res.status(404).send({ error: 'Conversation not found' });
         }
 
-        const newMessage = await MessageModel.create(req.body);
+        // Include the conversationId in the message data
+        const newMessageData = {
+            conversationId: req.params.id,
+            sender: req.body.sender,
+            content: req.body.content,
+            timestamp: req.body.timestamp
+        };
+
+        // Create the new message
+        const newMessage = await MessageModel.create(newMessageData);
+
+        // Add the message ID to the conversation's messages array
         conversation.messages.push(newMessage._id);
         await conversation.save();
 
+        // Send the newly created message as the response
         res.status(201).send(newMessage);
     } catch (err) {
+        console.log(err);
         res.status(500).send({ error: err.message });
     }
 });

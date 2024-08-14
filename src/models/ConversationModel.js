@@ -3,10 +3,10 @@ import mongoose from "mongoose";
 
 //Define structure of the conversation schema including data points, types, and validation
 const conversationSchema = new mongoose.Schema({
-    userID: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-    subject: { type: String, required: true },
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required:true },
+    subject: { type: String},
     messages: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Message' }], // Array of message IDs
-    timeCreated: { type: String, required: true }
+    timeCreated: { type: String}
 });
 
 // Create Model based on Conversation Schema

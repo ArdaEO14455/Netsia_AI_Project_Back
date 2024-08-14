@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import { ConversationModel } from '../models/ConversationModel.js'
+import { UserModel } from '../models/UserModel.js';
 
 const conversationRouter = Router()
 
@@ -18,15 +19,16 @@ conversationRouter.get('/:userId', async (req, res) => {
 });
 
 // Create a new conversation
-conversationRouter.post('/', async (req, res) => {
+conversationRouter.post('/:userId', async (req, res) => {
     try {
         const newConversation = await ConversationModel.create(req.body);
-        const user = await UserModel.findById(newConversation.user);
+        const user = await UserModel.findById (req.params.userId);
         user.conversations.push(newConversation._id);
         await user.save();
 
         res.status(201).send(newConversation);
     } catch (err) {
+        console.log(err)
         res.status(500).send({ error: err.message });
     }
 });
