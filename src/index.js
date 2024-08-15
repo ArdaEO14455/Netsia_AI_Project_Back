@@ -62,18 +62,6 @@ const allConversations = {
     }
   };
 
-// app.get('/', (req, res) => {
-//   res.send('Hello, World!');
-// });
-
-// app.get('/conversation-history', (req, res) => {
-//     res.json(conversationHistory);
-//   });
-
-// app.get('/allConversations', (req, res) => {
-// res.json(allConversations);
-// });
-
 
 
 

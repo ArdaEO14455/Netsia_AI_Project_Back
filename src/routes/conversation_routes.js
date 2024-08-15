@@ -21,18 +21,27 @@ conversationRouter.get('/:userId', async (req, res) => {
 // Create a new conversation
 conversationRouter.post('/:userId', async (req, res) => {
     try {
-        const newConversation = await ConversationModel.create(req.body);
-        const user = await UserModel.findById (req.params.userId);
+        // Extract the userId from the route parameter
+        const { userId } = req.params;
+
+        // Create the conversation with the userId included in the body
+        const newConversation = await ConversationModel.create({
+            ...req.body,
+            userId,
+        });
+
+        // Find the user and update their conversations array
+        const user = await UserModel.findById(userId);
         user.conversations.push(newConversation._id);
         await user.save();
 
         res.status(201).send(newConversation);
     } catch (err) {
-        console.log(err)
+        console.error(err);
         res.status(500).send({ error: err.message });
     }
 });
 
-export { conversationRouter };
+
 
 export default conversationRouter
