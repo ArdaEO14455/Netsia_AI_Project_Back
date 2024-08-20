@@ -11,6 +11,11 @@ pip install nodeenv
 nodeenv env
 source env/bin/activate
 
+
+install mongoose:
+
+npm install mongoose
+
 you should be able to activate the server with:
 
 npm start
