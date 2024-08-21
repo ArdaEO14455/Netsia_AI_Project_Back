@@ -1,6 +1,7 @@
 import mongoose from "mongoose"
 import dotenv from "dotenv"
 
+//This is my comment -Ata 
 
 
 // loading an env file and setting the environment variables
