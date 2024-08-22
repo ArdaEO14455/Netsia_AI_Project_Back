@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import { ConversationModel } from '../models/ConversationModel.js'
 import { UserModel } from '../models/UserModel.js';
+import { MessageModel } from '../models/MessageModel.js';
 
 const conversationRouter = Router()
 
@@ -45,15 +46,11 @@ conversationRouter.post('/:userId', async (req, res) => {
 conversationRouter.delete('/:id', async (req, res) => {
     try {
       // deleteOne to delete an object with a specified id 
-      const deleteResult = await ConversationModel.deleteOne({ _id: req.params.id })
-      // if at least 1 document was deleted
-      if (deleteResult.deletedCount > 0) {
-        // send a status code 200
+      await ConversationModel.deleteOne({ _id: req.params.id })
+      //Find & Delete messages that hold the conversationId of the deleted conversation
+      await MessageModel.deleteMany({conversationId: req.params.id})
         res.sendStatus(200)
-      } else {
-        res.status(404).send({ error: 'Conversation not found' })
       }
-    }
     catch(err) {
       res.status(500).send({ error: err.message })
     }
