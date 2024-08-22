@@ -30,7 +30,6 @@ const getAIResponse = async () => {
   
         // Parse the JSON output from the Python script
         const result = JSON.stringify(stdout);
-        console.log(`result:${result}`)
         resolve(result.response);
       });
     });
@@ -76,7 +75,7 @@ messageRouter.post('/:id', async (req, res) => {
 
         // Conditionally call getAIResponse() if the sender is 'user'
         if (newMessage.sender === 'user') {
-            getAIResponse();
+            await getAIResponse();
         }
 
         res.status(201).send(newMessage);
