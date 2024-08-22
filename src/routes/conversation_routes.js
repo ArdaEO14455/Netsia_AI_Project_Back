@@ -42,6 +42,23 @@ conversationRouter.post('/:userId', async (req, res) => {
     }
 });
 
+conversationRouter.delete('/:id', async (req, res) => {
+    try {
+      // deleteOne to delete an object with a specified id 
+      const deleteResult = await ConversationModel.deleteOne({ _id: req.params.id })
+      // if at least 1 document was deleted
+      if (deleteResult.deletedCount > 0) {
+        // send a status code 200
+        res.sendStatus(200)
+      } else {
+        res.status(404).send({ error: 'Conversation not found' })
+      }
+    }
+    catch(err) {
+      res.status(500).send({ error: err.message })
+    }
+  })
+
 
 
 export default conversationRouter
