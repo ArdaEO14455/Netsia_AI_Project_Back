@@ -20,34 +20,6 @@ app.use('/user', userRouter);
 app.use('/message', messageRouter);
 app.use('/conversation', conversationRouter);
 
-// Function to get the AI response from llama.py
-const getAIResponse = () => {
-  return new Promise((resolve, reject) => {
-    exec('python3 ./src/llama.py', (error, stdout, stderr) => {
-      if (error) {
-        reject(`Error: ${error.message}`);
-        return;
-      }
-      if (stderr) {
-        reject(`Stderr: ${stderr}`);
-        return;
-      }
 
-      // Parse the JSON output from the Python script
-      const result = JSON.parse(stdout);
-      resolve(result.response);
-    });
-  });
-};
-
-// Example route to get the AI response
-app.get('/ai-response', async (req, res) => {
-  try {
-    const response = await getAIResponse();
-    res.json({ message: response });
-  } catch (error) {
-    res.status(500).json({ error });
-  }
-});
 
 export default app;
