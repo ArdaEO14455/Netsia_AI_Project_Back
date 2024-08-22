@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import { ConversationModel } from '../models/ConversationModel.js'
 import { UserModel } from '../models/UserModel.js';
+import { MessageModel } from '../models/MessageModel.js';
 
 const conversationRouter = Router()
 
@@ -41,6 +42,19 @@ conversationRouter.post('/:userId', async (req, res) => {
         res.status(500).send({ error: err.message });
     }
 });
+
+conversationRouter.delete('/:id', async (req, res) => {
+    try {
+      // deleteOne to delete an object with a specified id 
+      await ConversationModel.deleteOne({ _id: req.params.id })
+      //Find & Delete messages that hold the conversationId of the deleted conversation
+      await MessageModel.deleteMany({conversationId: req.params.id})
+        res.sendStatus(200)
+      }
+    catch(err) {
+      res.status(500).send({ error: err.message })
+    }
+  })
 
 
 

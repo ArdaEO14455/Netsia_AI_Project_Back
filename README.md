@@ -23,15 +23,19 @@ Controls how resources on your server are shared across different domains. By de
 npm instal cors
 
 ### Dotenv
+Mainly for development in a virtual environment, dotenv loads environment variables from a .env file into process.env. This is useful for storing sensitive information like database connection strings, API keys, or any configuration that should not be hardcoded in your source code.
 npm install dotenv
 
 ### Express
+Provides the core framework for building your server and API. Express is a lightweight and flexible Node.js framework that simplifies building web applications and APIs. It handles routing, middleware, and server-side logic.
 npm install express
 
 ### MongoDB
 npm install mongodb
 
 ### Mongoose
+Provides a schema-based solution to model your MongoDB data. Mongoose is an Object Data Modeling (ODM) library for MongoDB and Node.js. It allows you to define schemas for your MongoDB collections and provides a straightforward API for querying and manipulating the data.
+
 npm install mongoose
 
 
