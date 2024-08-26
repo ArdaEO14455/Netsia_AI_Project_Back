@@ -12,6 +12,8 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const messageRouter = Router()
 
+
+
 // Function to get the AI response from llama.py
 const getAIResponse = async () => {
     return new Promise((resolve, reject) => {
