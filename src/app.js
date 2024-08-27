@@ -1,5 +1,4 @@
 import express from 'express';
-import { exec } from 'child_process';
 import './db.js';
 import userRouter from './routes/user_routes.js';
 import messageRouter from './routes/message_routes.js';

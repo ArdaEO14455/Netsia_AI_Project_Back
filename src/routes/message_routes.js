@@ -1,41 +1,9 @@
-import fs from 'fs';
-import path from 'path';
 import { Router } from 'express';
 import { ConversationModel } from '../models/ConversationModel.js';
 import { MessageModel } from '../models/MessageModel.js';
-import { dirname } from 'path';
-import { fileURLToPath } from 'url';
-import { exec } from 'child_process';
-
-// Get the current directory path
-const __dirname = dirname(fileURLToPath(import.meta.url));
+import { getAIResponse } from './ai_routes.js';
 
 const messageRouter = Router()
-
-
-
-// Function to get the AI response from llama.py
-const getAIResponse = async () => {
-    return new Promise((resolve, reject) => {
-      exec('python3 ./src/llama.py', (error, stdout, stderr) => {
-        
-        if (error) {
-            console.log('error 1')
-          reject(`Error: ${error.message}`);
-          return;
-        }
-        if (stderr) {
-            onsole.log('error 2')
-          reject(`Stderr: ${stderr}`);
-          return;
-        }
-  
-        // Parse the JSON output from the Python script
-        const result = JSON.stringify(stdout);
-        resolve(result.response);
-      });
-    });
-  };
 
 // Retrieve all messages in a given conversation
 messageRouter.get('/:id', async (req, res) => {
@@ -52,39 +20,50 @@ messageRouter.get('/:id', async (req, res) => {
 });
 //Create Message
 
+// Create a new message in a conversation
 messageRouter.post('/:id', async (req, res) => {
     try {
-        const conversation = await ConversationModel.findById(req.params.id);
-        if (!conversation) {
-            return res.status(404).send({ error: 'Conversation not found' });
-        }
-
-        const newMessageData = {
+      const conversation = await ConversationModel.findById(req.params.id);
+      if (!conversation) {
+        return res.status(404).send({ error: 'Conversation not found' });
+      }
+      //store new message data
+      const newMessageData = {
+        conversationId: req.params.id,
+        sender: req.body.sender,
+        content: req.body.content,
+        timestamp: req.body.timestamp,
+      };
+      //Create & Save message in DB
+      const newMessage = await MessageModel.create(newMessageData);
+  
+      conversation.messages.push(newMessage._id);
+      await conversation.save();
+  
+      // If the message is from the user, fetch the AI response
+      if (newMessage.sender === 'user') {
+        const aiResponseContent = await getAIResponse(newMessage);
+        if (aiResponseContent) {
+          // Create a new message for the AI response
+          const aiMessageData = {
             conversationId: req.params.id,
-            sender: req.body.sender,
-            content: req.body.content,
-            timestamp: req.body.timestamp
-        };
-
-        const newMessage = await MessageModel.create(newMessageData);
-
-        conversation.messages.push(newMessage._id);
-        await conversation.save();
-
-        // Save the new message to a JSON file
-        const filePath = path.join(__dirname, 'latest_message.json');
-        fs.writeFileSync(filePath, JSON.stringify(newMessage, null, 2));
-
-        // Conditionally call getAIResponse() if the sender is 'user'
-        if (newMessage.sender === 'user') {
-            await getAIResponse();
+            sender: 'chatgpt',
+            content: aiResponseContent,
+            timestamp: 'test-time',
+          };
+  
+          const aiMessage = await MessageModel.create(aiMessageData);
+  
+          conversation.messages.push(aiMessage._id);
+          await conversation.save();
         }
-
-        res.status(201).send(newMessage);
+      }
+  
+      res.status(201).send(newMessage);
     } catch (err) {
-        console.log(err);
-        res.status(500).send({ error: err.message });
+      console.log(err);
+      res.status(500).send({ error: err.message });
     }
-});
-
-export default messageRouter;
+  });
+  
+  export default messageRouter;
