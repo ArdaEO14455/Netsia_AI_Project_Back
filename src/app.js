@@ -1,8 +1,9 @@
 import express from 'express';
 import './db.js';
-import userRouter from './routes/user_routes.js';
-import messageRouter from './routes/message_routes.js';
-import conversationRouter from './routes/conversation_routes.js';
+import userRouter from './routes/UserRoutes.js';
+import messageRouter from './routes/MessageRoutes.js';
+import conversationRouter from './routes/ConversationRoutes.js';
+import authRouter from './routes/AuthRoutes.js';
 import cors from 'cors';
 
 // Creating an instance of the express app
@@ -18,6 +19,7 @@ app.use(express.json());
 app.use('/user', userRouter);
 app.use('/message', messageRouter);
 app.use('/conversation', conversationRouter);
+app.use('/auth', authRouter)
 
 
 

@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { ConversationModel } from '../models/ConversationModel.js';
 import { MessageModel } from '../models/MessageModel.js';
-import { getAIResponse } from './ai_routes.js';
+import { getAIResponse } from './AiRoutes.js';
 
 const messageRouter = Router()
 
@@ -41,8 +41,8 @@ messageRouter.post('/:id', async (req, res) => {
       await conversation.save();
   
       // If the message is from the user, fetch the AI response
-      if (newMessage.sender === 'user') {
-        const aiResponseContent = await getAIResponse(newMessage);
+      if (newMessageData.sender === 'user') {
+        const aiResponseContent = await getAIResponse(newMessageData);
         if (aiResponseContent) {
           // Create a new message for the AI response
           const aiMessageData = {

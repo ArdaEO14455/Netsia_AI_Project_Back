@@ -1,16 +1,25 @@
 import fetch from "node-fetch";
+import dotenv from "dotenv"
+
+
+
+// loading an env file and setting the environment variables
+dotenv.config()
+
 
 export const getAIResponse = async (newMessage) => {
     try {
+      console.log(newMessage.content)
+      
       // Make a POST request to the AI API with the message content in the body
-      const response = await fetch('http://localhost:6000/', {
+      const response = await fetch('http://127.0.0.1:5000/api/ask', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: {
-          content: newMessage.content, // Sending only the message content to the AI API
-        },
+        body: JSON.stringify({
+          question: newMessage.content, // Sending only the message content to the AI API
+        }),
       });
   
       if (!response.ok) {
