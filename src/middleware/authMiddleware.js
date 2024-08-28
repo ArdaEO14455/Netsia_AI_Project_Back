@@ -1,16 +1,29 @@
-const authMiddleware = (req, res, next) => {
-    //check that token exists before allowing route
-    const token = req.header('x-auth-token');
-    if (!token) return res.status(401).json({ msg: 'No token, authorization denied' });
+import jwt from 'jsonwebtoken';
 
-    else {
-    try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        req.user = decoded.id;
-        next();
-    } catch (err) {
-        res.status(400).json({ msg: 'Token is not valid' });
-    }}
+const authMiddleware = (req, res, next) => {
+  const authHeader = req.headers.authorization;
+  
+  console.log('Authorization Header:', authHeader); // Log the entire Authorization header
+
+  if (!authHeader) {
+    return res.status(401).json({ error: 'No token provided' });
+  }
+
+  const token = authHeader.startsWith('Bearer ') ? authHeader.split(' ')[1] : authHeader;
+  
+  console.log('Extracted Token:', token); // Log the extracted token
+
+  if (!token) {
+    return res.status(401).json({ error: 'Invalid token format' });
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = decoded;
+    next();
+  } catch (err) {
+    return res.status(403).json({ error: 'Invalid token' });
+  }
 };
 
 export default authMiddleware;

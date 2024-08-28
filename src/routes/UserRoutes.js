@@ -2,12 +2,11 @@ import { Router } from 'express';
 import { UserModel } from '../models/UserModel.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import authMiddleware from '../middleware/authMiddleware.js';
 
 const userRouter = Router();
 
 // Apply authMiddleware to protect all routes except the registration route
-userRouter.use('/secure', authMiddleware);
+
 
 // Route to create a new user (Registration)
 userRouter.post('/', async (req, res) => {

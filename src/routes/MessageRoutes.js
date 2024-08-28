@@ -2,8 +2,11 @@ import { Router } from 'express';
 import { ConversationModel } from '../models/ConversationModel.js';
 import { MessageModel } from '../models/MessageModel.js';
 import { getAIResponse } from './AiRoutes.js';
+import authMiddleware from '../middleware/authMiddleware.js';
+
 
 const messageRouter = Router()
+// messageRouter.use('/', authMiddleware);
 
 // Retrieve all messages in a given conversation
 messageRouter.get('/:id', async (req, res) => {
