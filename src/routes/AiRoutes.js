@@ -21,7 +21,7 @@ export const getAIResponse = async (newMessage) => {
           question: newMessage.content, // Sending only the message content to the AI API
         }),
       });
-  
+      console.log(process.env.PYTHON_WEBSERVER_URL)
       if (!response.ok) {
         throw new Error('Failed to fetch AI response');
       }

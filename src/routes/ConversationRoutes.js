@@ -2,8 +2,11 @@ import { Router } from 'express'
 import { ConversationModel } from '../models/ConversationModel.js'
 import { UserModel } from '../models/UserModel.js';
 import { MessageModel } from '../models/MessageModel.js';
+import authMiddleware from '../middleware/authMiddleware.js';
 
 const conversationRouter = Router()
+
+conversationRouter.use('/', authMiddleware);
 
 // Retrieve all conversations for a given user by user ID
 conversationRouter.get('/:userId', async (req, res) => {

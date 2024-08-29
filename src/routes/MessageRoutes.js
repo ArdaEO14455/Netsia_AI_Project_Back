@@ -6,7 +6,9 @@ import authMiddleware from '../middleware/authMiddleware.js';
 
 
 const messageRouter = Router()
-// messageRouter.use('/', authMiddleware);
+
+//Apply Token Authentication Middleware to all routes
+messageRouter.use('/', authMiddleware);
 
 // Retrieve all messages in a given conversation
 messageRouter.get('/:id', async (req, res) => {
