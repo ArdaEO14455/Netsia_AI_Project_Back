@@ -46,6 +46,37 @@ conversationRouter.post('/:userId', async (req, res) => {
     }
 });
 
+// Route to rename a conversation
+conversationRouter.patch('/:conversationId', async (req, res) => {
+    try {
+        // Extract the conversationId from the route parameter
+        const { conversationId } = req.params;
+
+        // Extract the new subject from the request body
+        const subject = req.body.subject;
+        console.log(subject)
+
+        // Find the conversation by ID and update the subject
+        const updatedConversation = await ConversationModel.findByIdAndUpdate(
+            conversationId,
+            { subject },
+            { new: true, runValidators: true } // Return the updated document and run any validators
+        );
+
+        if (!updatedConversation) {
+            return res.status(404).send({ error: 'Conversation not found' });
+        }
+
+        res.status(200).send(updatedConversation);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send({ error: err.message });
+    }
+});
+
+
+
+
 conversationRouter.delete('/:id', async (req, res) => {
     try {
       // deleteOne to delete an object with a specified id 
