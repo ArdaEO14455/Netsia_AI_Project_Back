@@ -72,12 +72,14 @@ Provides the core framework for building your server and API. Express is a light
 
 #### Nodemon
 
-Purely for development purposes, this library allows changes to be made to the source code to be reflected without having to restart the server.
+Purely for development purposes, this library allows changes to be made to the source code to be reflected without having to restart the server. if you are using nodemon, make sure the following is added to your scripts in package.json:
 
+"dev": "nodemon src/index.js"
 
 you should be able to activate the server with:
 
 npm run dev
+(if you are using nodemon)
 
 or
 

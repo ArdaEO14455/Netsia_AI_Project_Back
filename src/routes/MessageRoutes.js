@@ -70,5 +70,41 @@ messageRouter.post('/:id', async (req, res) => {
       res.status(500).send({ error: err.message });
     }
   });
+
+  // Regenerate Response
+messageRouter.post('/regen/:id', async (req, res) => {
+  try {
+    const conversation = await ConversationModel.findById(req.params.id);
+    if (!conversation) {
+      return res.status(404).send({ error: 'Conversation not found' });
+    }
+    //store new message data
+    const newMessageData = {
+      conversationId: req.params.id,
+      sender: req.body.sender,
+      content: req.body.content,
+      timestamp: req.body.timestamp,
+    };
+      const aiResponseContent = await getAIResponse(newMessageData);
+      if (aiResponseContent) {
+        // Create a new message for the AI response
+        const aiMessageData = {
+          conversationId: req.params.id,
+          sender: 'chatgpt',
+          content: aiResponseContent,
+          timestamp: 'test-time',
+        };
+
+        const aiMessage = await MessageModel.create(aiMessageData);
+
+        conversation.messages.push(aiMessage._id);
+        await conversation.save();
+        res.status(201).send(aiMessage);
+      }
+  } catch (err) {
+    console.log(err);
+    res.status(500).send({ error: err.message });
+  }
+});
   
   export default messageRouter;
