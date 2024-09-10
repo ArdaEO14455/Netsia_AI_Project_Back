@@ -48,26 +48,30 @@ messageRouter.post('/:id', async (req, res) => {
       // If the message is from the user, fetch the AI response
       if (newMessageData.sender === 'user') {
         const aiResponseContent = await getAIResponse(newMessageData);
-        if (aiResponseContent) {
-          // Create a new message for the AI response
-          const aiMessageData = {
-            conversationId: req.params.id,
-            sender: 'chatgpt',
-            content: aiResponseContent,
-            timestamp: 'test-time',
-          };
-  
-          const aiMessage = await MessageModel.create(aiMessageData);
-  
-          conversation.messages.push(aiMessage._id);
-          await conversation.save();
+        if (aiResponseContent === null) {
+          res.status(500).send();
+        }
+        else {
+            // Create a new message for the AI response
+            const aiMessageData = {
+              conversationId: req.params.id,
+              sender: 'chatgpt',
+              content: aiResponseContent,
+              timestamp: 'test-time',
+            };
+
+            const aiMessage = await MessageModel.create(aiMessageData);
+
+            conversation.messages.push(aiMessage._id);
+            await conversation.save(); 
+            res.status(201).send(newMessage);
         }
       }
-  
-      res.status(201).send(newMessage);
     } catch (err) {
-      console.log(err);
+      console.log('error')
       res.status(500).send({ error: err.message });
+      console.log(err);
+      
     }
   });
 
@@ -86,7 +90,10 @@ messageRouter.post('/regen/:id', async (req, res) => {
       timestamp: req.body.timestamp,
     };
       const aiResponseContent = await getAIResponse(newMessageData);
-      if (aiResponseContent) {
+      if (aiResponseContent === null) {
+        res.status(500).send();
+      }
+      else {
         // Create a new message for the AI response
         const aiMessageData = {
           conversationId: req.params.id,

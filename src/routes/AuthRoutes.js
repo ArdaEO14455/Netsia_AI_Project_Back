@@ -33,4 +33,15 @@ authRouter.post('/', async (req, res) => {
     }
 });
 
+// Logout Route
+authRouter.post('/logout', async (req, res) => {
+    try {
+        res.status(200).json({ msg: 'Logout successful. Token should be removed from client storage.' });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+
+
 export default authRouter;
