@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 const userSchema = new mongoose.Schema ({
     //user ID will be generated automatically
     username: { type: String, required: true },
-    email: {type: String},
+    email: {type: String, required: true },
     password: {type: String}, //Make sure to encrypt password & create validation)
     conversations: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Conversation' }]
 })

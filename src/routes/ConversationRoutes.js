@@ -2,8 +2,11 @@ import { Router } from 'express'
 import { ConversationModel } from '../models/ConversationModel.js'
 import { UserModel } from '../models/UserModel.js';
 import { MessageModel } from '../models/MessageModel.js';
+import authMiddleware from '../middleware/authMiddleware.js';
 
 const conversationRouter = Router()
+
+conversationRouter.use('/', authMiddleware);
 
 // Retrieve all conversations for a given user by user ID
 conversationRouter.get('/:userId', async (req, res) => {
@@ -42,6 +45,37 @@ conversationRouter.post('/:userId', async (req, res) => {
         res.status(500).send({ error: err.message });
     }
 });
+
+// Route to rename a conversation
+conversationRouter.patch('/:conversationId', async (req, res) => {
+    try {
+        // Extract the conversationId from the route parameter
+        const { conversationId } = req.params;
+
+        // Extract the new subject from the request body
+        const subject = req.body.subject;
+        console.log(subject)
+
+        // Find the conversation by ID and update the subject
+        const updatedConversation = await ConversationModel.findByIdAndUpdate(
+            conversationId,
+            { subject },
+            { new: true, runValidators: true } // Return the updated document and run any validators
+        );
+
+        if (!updatedConversation) {
+            return res.status(404).send({ error: 'Conversation not found' });
+        }
+
+        res.status(200).send(updatedConversation);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send({ error: err.message });
+    }
+});
+
+
+
 
 conversationRouter.delete('/:id', async (req, res) => {
     try {
