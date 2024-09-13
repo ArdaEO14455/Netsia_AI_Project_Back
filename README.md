@@ -1,8 +1,8 @@
-## Netsia AI Project Back End
+# Netsia AI Project Back End
 
 This AI application is designed to work as a development tool for company developers. Sharing many of its components and concepts with chatGPT, it serves as a conversation platform to interact with the AI.
 
-### Prerequisites
+## Prerequisites
 
 Ensure that you have the following software installed:
 
@@ -34,7 +34,8 @@ then activate the virtual environment in your terminal:
         source env/bin/activate
         ```
 
-Ensure that you are in the my-app directory, and install dependencies within the virtual environment:
+### Libraries
+Ensure that you are in the Back_End directory, and install dependencies within the virtual environment:
 
     npm install
 
@@ -44,10 +45,12 @@ Use check that depenencies are installed in the terminal:
 
 check that you have the following libraries:
 
-cors@2.8.5  
-dotenv@16.4.5  
-express@4.19.2  
-mongodb@6.8.0  
+bcryptjs@2.4.3
+cors@2.8.5
+dotenv@16.4.5
+express@4.19.2
+jsonwebtoken@9.0.2
+mongodb@6.8.0
 mongoose@8.5.3
 node-fetch@3.3.2
 nodemon@3.1.4
@@ -61,7 +64,6 @@ Mongoose is a Object Data Modelling (Library) that provides structured methods t
 Controls how resources on your server are shared across different domains. By default, web browsers block requests from different origins (domains) for security reasons. The cors library allows you to specify which origins (domains) are allowed to make requests to your server.
 
 #### Node-Fetch: 
-
 Allows fetch requests to be made to the python webserver to communicate with AI
 
 #### Dotenv
@@ -69,6 +71,12 @@ Mainly for development in a virtual environment, dotenv loads environment variab
 
 #### Express
 Provides the core framework for building your server and API. Express is a lightweight and flexible Node.js framework that simplifies building web applications and APIs. It handles routing, middleware, and server-side logic.
+
+#### Bcrypt
+Facilitates password encryption, decryption and comparison during login.
+
+#### Jsonwebtoken
+allows for the creation & signing of JSON Web tokens, which are then passed to the front-end, stored locally, and presented to the API for authentication.
 
 #### Nodemon
 
@@ -85,4 +93,21 @@ or
 
 npm start
 
-Your development server should be http://localhost:8000, remember to add this to your front end as the REACT_APP_API_KEY in your environmental variables for development.
+Your development server should be http://localhost:8000, remember to add this to your front end as the REACT_APP_API_KEY in your environmental variables.
+
+## Other Dependencies & Environmental Variables
+
+As this application is in development, it requires two other repositories to be utilized:
+
+Node.js API: https://github.com/ArdaEO14455/Netsia_AI_Project_Front
+Python Webserver (AI): https://github.com/atabahr/Flask
+
+Set up the React Frontend using the README in that repository. Ensure that the your API's URI is added to the env in the front-end repository under REACT_APP_API_KEY
+
+You will also need to set up the Python Webserver in a local development, and place the URI into the Node.js environmental variables under PYTHON_WEBSERVER_URL
+
+You must also define the JWT_SECRET variable in the .env file in order to authenticate & provide tokens. Note that any long string can be applied here.
+
+
+## PlantUML Sequence Diagram:
+![PlantUML Sequence Diagram](/docs/plantuml_sequence_diagram.png)
